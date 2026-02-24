@@ -16,5 +16,15 @@
     "url": "https://github.com/Lipe-acf/1024b-backend/issues"
   },
   "homepage": "https://github.com/Lipe-acf/1024b-backend#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
 }
