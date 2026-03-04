@@ -52,3 +52,14 @@ console.log(`O valor é: ${somaPares([1,2,3,4])}`)
 //faça uma função que receba 2 vetores e faça a operação de merge entre eles
 //ex: mergeVetor([1,2,3],[4,5,6]) => [1,2,3,4,5,6]
 
+function juntaVetor(junta1:number[], junta2:number[]):any{
+    
+    let resultado = junta1.concat(junta2)
+    return resultado
+}
+
+console.log(juntaVetor([1,2,3], [4,5,6]))
+
+
+
+//
