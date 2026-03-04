@@ -36,13 +36,14 @@ console.log(`O valor é ${somaVetor([1,2,3,4])}`)
 
 function somaPares(numeros:number[]):number{
     let soma = 0
-    for (let i = 0; i < vetor.length; i++) {
-        const element = vetor[i] 
-        if ( % 2 ==0) {
-            soma = soma + element!
+    for (let i = 0; i < numeros.length; i++) {
+        let element = numeros[i] 
+        if ( element! % 2 ==0) {
+            soma =soma + element!
         }
     }
     return soma
+    
 }
 
 console.log(`O valor é: ${somaPares([1,2,3,4])}`)
@@ -50,3 +51,4 @@ console.log(`O valor é: ${somaPares([1,2,3,4])}`)
 
 //faça uma função que receba 2 vetores e faça a operação de merge entre eles
 //ex: mergeVetor([1,2,3],[4,5,6]) => [1,2,3,4,5,6]
+
