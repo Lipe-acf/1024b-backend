@@ -111,9 +111,54 @@ function resolveEquacao(vetorX:number[]):number[] {
 }
 
 console.log(resolveEquacao([1, 2, 3]));
+
 //Fim do seu código
 
 
 
 //LISTA II
+
+/**
+ * Exercício 01 - Calcular o quadrado de um número
+ * Nome da função - calcularQuadrado
+ * Crie uma função que receba um número e retorne o seu valor elevado ao quadrado.
+ * @param {number} a Número a ser calculado
+ * @returns {number} Retorna o quadrado do número
+ * @example
+ * calcularQuadrado(2) // 4
+ * calcularQuadrado(-3) // 9
+ */
+
+//Início do seu código
+
+function eleva(a:number) {
+   return a * a
+}
+
+console.log(eleva(4))
+//Fim do seu código
+
+
+/**
+ * Exercício 02 - Verificar se um número é positivo
+ * Nome da função - ehPositivo
+ * Crie uma função que retorne verdadeiro se o número for maior que zero e falso caso contrário.
+ * @param {number} a Número a ser verificado
+ * @returns {boolean} Retorna true para positivos e false para negativos ou zero
+ * @example
+ * ehPositivo(2) // true
+ * ehPositivo(-3) // false
+ */
+
+//Início do seu código
+function ehPositivo(a:number) {
+    if (a >= 1) {
+        return true
+    } else {
+        return false
+    }
+}
+
+console.log(ehPositivo(-1))
+//Fim do seu código
 
