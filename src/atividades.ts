@@ -250,11 +250,11 @@ function encontrarMenorNumero(vetor: number[]): number {
   let menor = vetor[0];
 
   for (let i = 1; i < vetor.length; i++) {
-    if (vetor[i] < menor) {
+    if (vetor[i]! < menor!) {
       menor = vetor[i];
     }
   }
-  return menor;
+  return menor!;
 }
 console.log(encontrarMenorNumero([3,1,5,2,4]))
 
@@ -357,7 +357,7 @@ function contaVogais(str: string): number {
   let vogais = "aeiouAEIOU";
 
   for (let i = 0; i < str.length; i++) {
-    if (vogais.includes(str[i])) {
+    if (vogais.includes(str[i]!)) {
       contador++;
     }
   }
@@ -421,7 +421,7 @@ function contaConsoantes(str: string): number {
   for (let i = 0; i < str.length; i++) {
     let letra = str[i];
 
-    if (!vogais.includes(letra) && letra !== " ") {
+    if (!vogais.includes(letra!) && letra !== " ") {
       contador++;
     }
   }

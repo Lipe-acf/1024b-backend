@@ -64,41 +64,78 @@
 //Promessas 
 //Síncronas -> linha por linha                  assíncronas -> várias coisas ao mesmo tempo 
 
-//Paralelismo -> paralelo
-console.log("Início da execução do código")
-//async function funcao(){
-const funcao = async () =>{
-    const prom = 
-    new Promise<string>((resolve,reject)=>{
+// //Paralelismo -> paralelo
+// console.log("Início da execução do código")
+// //async function funcao(){
+// const funcao = async () =>{
+//     const prom = 
+//     new Promise<string>((resolve,reject)=>{
         
-        setTimeout(function handle (){
+//         setTimeout(function handle (){
     
-            reject("Executei a função")
+//             reject("Executei a função")
     
-        },5000)
-    })
-    return prom
+//         },5000)
+//     })
+//     return prom
     
-}
-try{
+// }
+// try{
 
-    const resultado = await funcao()
-    console.log(resultado)
-}
-catch(erro){
-    console.log("Erro:"+ erro)
-}
-
-
-// funcao().then((resultado)=>console.log(resultado))
-// .catch((erro)=>console.log("Erro  Promise:" + erro))
-//console.log(funcao())
-console.log("Fim da execução do código")
+//     const resultado = await funcao()
+//     console.log(resultado)
+// }
+// catch(erro){
+//     console.log("Erro:"+ erro)
+// }
 
 
+// // funcao().then((resultado)=>console.log(resultado))
+// // .catch((erro)=>console.log("Erro  Promise:" + erro))
+// //console.log(funcao())
+// console.log("Fim da execução do código")
 
-// Crie uma função que tenha 50% de chance de retornar "tere" após 
-// 5 segundos ou a função devolve o valor null 
-// function devolveTere()
-// e faça o tratamento do erro com o try e catch.
+
+
+// // Crie uma função que tenha 50% de chance de retornar "tere" após 
+// // 5 segundos ou a função devolve o valor null 
+// // function devolveTere()
+// // e faça o tratamento do erro com o try e catch.
+
+
+
+//funções de vetores -> revisão 
+
+// //FIND
+  const vetor = [1,2,3,4,5,6,7]
+// //procurar-> find
+// //ele procura o que nós mandarmos
+
+// function entrarVetor(num:number) {
+//     return num == 3
+// }
+// console.log(vetor.find(entrarVetor))
+
+
+// FILTRA
+const pessoas = [{id:1,nome:"Tere"}, {id:2,nome:"Marcelo"}]
+console.log(pessoas.filter((p)=>p.id>=1))
+
+//MAP
+//Tbm vamos passar uma funçãoem cada elemento do vetor
+//E criar um novo vetor transformado pela função
+
+const r = vetor.map((x:number)=> x*x)
+console.log(r)
+
+// SPREAD
+const vetor2 = vetor
+const vetor3 = [...vetor, ...vetor]
+vetor2[0] = 10
+vetor3[1] = 10
+console.log(vetor3)
+
+const [posicao1, posicao2,...resto] = vetor3
+console.log(posicao1, posicao2, resto)
+
 
