@@ -282,7 +282,7 @@ function calcularMaior(a1:number, b1:number):number {
     }
 }
 
-console.log(calcularFatorial(1,6))
+console.log(calcularFatorial(1,))
 //Fim do seu código
 
 

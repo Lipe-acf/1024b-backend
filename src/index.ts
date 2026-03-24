@@ -1,21 +1,68 @@
 import mysql from 'mysql2/promise';
 
-try {
-  // Cria a conexão com o Banco de Dados
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'aula1',
-  });
+import express from 'express'
+const app = express()
 
+const connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  database: 'aula1',
+});
+
+app.get("/pessoa", async (req, res)=>{
+  try { 
+
+  const nome = "Algum nome"
+  const [resultado, campos] 
+      = await connection.execute(`SELECT * FROM pessoa`)
+ console.log(resultado)
+ res.status(200).json(resultado)
+} catch (err) {
+  console.log(err);
+  res.status(500).json({mensagem:"Erro no servidor!"})
+}
+
+}) //listar
+app.post("/pessoa", async (req, res)=>{
+  try { 
   // "execute" irá chamar internamente a preparação e a consulta (query)
   // const preparacao = await connection.prepare("select * from pessoa");
-  const id = 5
-  const nome = "Marcos'); drop database aula1;('"
-  const preparacao = await connection.prepare(`insert into pessoa (id, nome) value (?,?)`);
-  const [resultado, campos] = await preparacao.execute([id,nome])
+  const {id, nome} = req.body
+
+  const [resultado, campos] 
+      = await connection.execute(`insert into pessoa value (?,?)`,[id,nome])
+  res.status(201).json({mesagem:"Sucesso"})
+  console.log(resultado)
+} catch (err) {
+  console.log(err);
+  res.status(500).json({mensagem:"Erro no servidor!"})
+}
+}) //inserir
+
+//Criar servidor
+app.listen(8000,()=>{
+  console.log("Servidor iniciado na porta 8000")
+})
+
+
+
+/*
+// Cria a conexão com o Banco de Dados
+const connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  database: 'aula1',
+});
+try { 
+  // "execute" irá chamar internamente a preparação e a consulta (query)
+  // const preparacao = await connection.prepare("select * from pessoa");
+  const id = 7
+  const nome = "Algum nome"
+  const [resultado, campos] 
+      = await connection.execute(`insert into pessoa value (?,?)`,[id,nome])
   console.log(resultado)
   await connection.end();
 } catch (err) {
   console.log(err);
 }
+*/
