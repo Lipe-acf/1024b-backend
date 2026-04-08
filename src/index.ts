@@ -120,8 +120,6 @@ app.post("/cadastro_produto", async (req, res) => {
     //Se não foram, retone o código 400 com a mensagem "id ou nome inválidos"
     //Não deixe o código executar a parte de baixo quando for inválido.
 
-    
-
     if (id == null || nome == "") {
   return res.status(400).json({ mensagem: "Id ou nome inválidos" })
 }
