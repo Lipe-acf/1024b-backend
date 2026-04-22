@@ -1,4 +1,3 @@
-
 import mysql from 'mysql2/promise'
 import express from 'express'
 import MysqlErrorHandle from './mysql_error_handle.js';
