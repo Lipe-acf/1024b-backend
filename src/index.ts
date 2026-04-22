@@ -19,42 +19,10 @@ app.use(express.json())
 
 
 
-// app.get("/pessoa", async (req, res) => {
-//   try {
 
-//     const nome = "Algum nome"
-//     const [resultado, campos]
-//       = await connection.execute(`SELECT * FROM pessoa`)
-//     console.log(resultado)
-//     res.status(200).json(resultado)
-//   } catch (err) {
-//     const mysqlErrorHandle = new MysqlErrorHandle(err, res)
-// mysqlErrorHandle.validar()
-//   }
 
-// }) //listar
-// app.post("/pessoa", async (req, res) => {
-//   try {
-//     // "execute" irá chamar internamente a preparação e a consulta (query)
-//     // const preparacao = await connection.prepare("select * from pessoa");
-//     const { id, nome } = req.body
-//     //Valide se o id e o nome foram passados corretamente. (Algum valor)
-//     //Se não foram, retone o código 400 com a mensagem "id ou nome inválidos"
-//     //Não deixe o código executar a parte de baixo quando for inválido.
 
-//     if (id != null && nome != "") {
-//       res.status(400).json({ mensagem: "Id ou nome diferente de 0" })
-//     }
 
-//     const [resultado, campos]
-//       = await connection.execute(`insert into pessoa value (?,?)`, [id, nome])
-//     res.status(201).json({ mesagem: "Sucesso" })
-//     console.log(resultado)
-//   } catch (err) {
-//    const mysqlErrorHandle = new MysqlErrorHandle(err, res)
-// mysqlErrorHandle.validar()
-//   }
-// }) //inserir
 
 
 
