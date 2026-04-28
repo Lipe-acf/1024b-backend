@@ -148,7 +148,7 @@ app.get("/pedidos_2026", async (req, res) => {
 
     
     const [resultado, campos]
-      = await connection.execute(`SELECT clientes.idclientes, clientes.nome, clientes.idade, pedidos.idpedidos, pedidos.datapedidos FROM dbteremercado.clientes INNER JOIN dbteremercado.pedidos ON clientes.idclientes = pedidos.clientes_idclientes`)
+      = await connection.execute(`SELECT clientes.idclientes, clientes.nome, clientes.idade, pedidos.idpedidos, pedidos.datapedido FROM dbteremercado.clientes INNER JOIN dbteremercado.pedidos ON clientes.idclientes = pedidos.clientes_idclientes`)
     console.log(resultado)
     res.status(200).json(resultado)
   } catch (err) {
@@ -160,14 +160,25 @@ mysqlErrorHandle.validar()
 
 
 
-
-
-
-
 //3 
 //crie uma rota chamada '/quantidade_pedidos' que retorne um json no formato '{quantidade_pedidos:100}' com a quantidade de pedidos cadastrados na tabela pedidos.
 //USE O COMANDO COUNT(*) para contar as quantidades.
 
+
+app.get("/quantidade_pedidos", async (req, res) => {
+  try {
+
+    
+    const [resultado, campos]
+      = await connection.execute(`SELECT SUM(quantidade) AS quantidade_pedidos FROM dbteremercado.itenspedidos`)
+    console.log(resultado)
+    res.status(200).json(resultado)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res)
+mysqlErrorHandle.validar()
+  }
+
+})
 
 
 //4
@@ -175,9 +186,22 @@ mysqlErrorHandle.validar()
 //de pedidos que cada cliente fez.
 
 
+app.get("/quantidade_pedidos_clientes", async (req, res) => {
+  try {
 
+    
+    const [resultado, campos]
+      = await connection.execute(`SELECT clientes.nome AS nome, itenspedidos.quantidade AS quantidade_pedidos 
+        FROM dbteremercado.clientes INNER JOIN dbteremercado.itenspedidos 
+        ON clientes.idclientes = itenspedidos.pedidos_idpedidos`)
+    console.log(resultado)
+    res.status(200).json(resultado)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res)
+mysqlErrorHandle.validar()
+  }
 
-
+})
 
 
 
