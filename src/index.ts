@@ -118,7 +118,9 @@ app.use(express.json())
 
 
 
-
+interface IQuantidadePedido extends RowDataPacket{
+    quantidade_pedidos:number
+}
 
 //1
 // Crie uam rota chamada '/cliente_data_pedido' que retorne os clientes e data que os mesmos fizeram o pedido
@@ -148,7 +150,9 @@ app.get("/pedidos_2026", async (req, res) => {
 
     
     const [resultado, campos]
-      = await connection.execute(`SELECT clientes.idclientes, clientes.nome, clientes.idade, pedidos.idpedidos, pedidos.datapedido FROM dbteremercado.clientes INNER JOIN dbteremercado.pedidos ON clientes.idclientes = pedidos.clientes_idclientes`)
+      = await connection.execute(`SELECT clientes.idclientes, clientes.nome, clientes.idade, pedidos.idpedidos, pedidos.datapedido FROM dbteremercado.clientes 
+        INNER JOIN dbteremercado.pedidos ON clientes.idclientes = pedidos.clientes_idclientes 
+        WHERE datapedido BETWEEN '2026-01-01' AND '2026-12-31'`)
     console.log(resultado)
     res.status(200).json(resultado)
   } catch (err) {
@@ -170,8 +174,10 @@ app.get("/quantidade_pedidos", async (req, res) => {
 
     
     const [resultado, campos]
-      = await connection.execute(`SELECT SUM(quantidade) AS quantidade_pedidos FROM dbteremercado.itenspedidos`)
-    console.log(resultado)
+      = await connection.execute<IQuantidadePedido[]>(`SELECT COUNT(*) AS quantidade_pedidos FROM pedidos`)
+      const [quantidadePedidos] = [...resultado]
+      console.log(quantidadePedidos)
+    
     res.status(200).json(resultado)
   } catch (err) {
     const mysqlErrorHandle = new MysqlErrorHandle(err, res)
@@ -191,9 +197,8 @@ app.get("/quantidade_pedidos_clientes", async (req, res) => {
 
     
     const [resultado, campos]
-      = await connection.execute(`SELECT clientes.nome AS nome, itenspedidos.quantidade AS quantidade_pedidos 
-        FROM dbteremercado.clientes INNER JOIN dbteremercado.itenspedidos 
-        ON clientes.idclientes = itenspedidos.pedidos_idpedidos`)
+      = await connection.execute(`SELECT c.nome as nome, COUNT(*) AS quantidade_pedidos FROM clientes c
+        INNER JOIN pedidos p ON c.idclientes = p.clientes_idclientes GROUP BY c.nome`)
     console.log(resultado)
     res.status(200).json(resultado)
   } catch (err) {
@@ -203,7 +208,65 @@ mysqlErrorHandle.validar()
 
 })
 
+/**
+ * 5) ROTA    /quantidade_produtos_por_cliente
+ * Crie um código que retorne o nome do cliente e a quantidade de produtos que cada pedido tem
+ *    formato    [{nome:"Nome Cliente",idpedido:1,quantidade_produtos:1000}]
+ */
 
+app.get("/quantidade_produtos_por_cliente", async (req, res) => {
+  try {
+
+    
+    const [resultado, campos]
+      = await connection.execute<IQuantidadePedido[]>(`SELECT clientes.nome AS nome, SUM(quantidade) AS quantidade_produto 
+        FROM clientes  
+        INNER JOIN pedidos 
+         ON clientes.idclientes = pedidos.clientes_idclientes 
+        INNER JOIN itenspedidos  
+         ON pedidos.idpedidos = itenspedidos.pedidos_idpedidos 
+         GROUP BY clientes.nome
+        ;`)
+      console.log(resultado)
+    
+    res.status(200).json(resultado)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res)
+mysqlErrorHandle.validar()
+  }
+
+})
+
+ /** 
+ * 6)    /valor_pedido_total
+ * Crie um código que retorne o nome do cliente e o valor total de cada pedido
+ *    [{nome:"Nome Cliente",valor_total:1000}]
+ */
+
+app.get("/valor_pedido_total", async (req, res) => {
+  try {
+
+    
+    const [resultado, campos]
+      = await connection.execute<IQuantidadePedido[]>(`SELECT clientes.nome AS nome, SUM(quantidade) AS quantidade_produto 
+        FROM clientes  
+        INNER JOIN pedidos 
+         ON clientes.idclientes = pedidos.clientes_idclientes 
+        INNER JOIN itenspedidos  
+         ON pedidos.idpedidos = itenspedidos.pedidos_idpedidos 
+        INNER JOIN produtos 
+        ON idprodutos = produtos_idprodutos
+         GROUP BY clientes.nome
+        ;`)
+      console.log(resultado)
+    
+    res.status(200).json(resultado)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res)
+mysqlErrorHandle.validar()
+  }
+
+})
 
 
 //Criar servidor
