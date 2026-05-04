@@ -248,7 +248,7 @@ app.get("/valor_pedido_total", async (req, res) => {
 
     
     const [resultado, campos]
-      = await connection.execute<IQuantidadePedido[]>(`SELECT clientes.nome AS nome, SUM(quantidade) AS quantidade_produto 
+      = await connection.execute<IQuantidadePedido[]>(`SELECT clientes.nome AS nome, SUM(itenspedidos.quantidade * produtos.preco) AS valor
         FROM clientes  
         INNER JOIN pedidos 
          ON clientes.idclientes = pedidos.clientes_idclientes 
