@@ -4,16 +4,20 @@ import MysqlErrorHandle from './mysql_error_handle.js';
 import  connection from './mysql_connection.js';
 import { type RowDataPacket } from "mysql2";
 import { time } from 'node:console';
+import cors from 'cors'
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+
+
 interface Ipizza extends RowDataPacket{
   id:number
   nome:string
   preco:number
   tamanho:string
   data_criacao:Date
-}
-
-const app = express()
-app.use(express.json())
+}  
 
 
 
