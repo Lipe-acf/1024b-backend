@@ -12,11 +12,7 @@ app.use(express.json())
 
 
 interface Ipizza extends RowDataPacket{
-  id:number
-  nome:string
-  preco:number
-  tamanho:string
-  data_criacao:Date
+  quantidade_pedidos:number
 }  
 
 
