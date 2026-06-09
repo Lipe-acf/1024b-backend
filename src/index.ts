@@ -224,7 +224,7 @@ mysqlErrorHandle.validar()
 
 })
 
- /** 
+ /*
  * 6)    /valor_pedido_total
  * Crie um código que retorne o nome do cliente e o valor total de cada pedido
  *    [{nome:"Nome Cliente",valor_total:1000}]
@@ -256,10 +256,13 @@ mysqlErrorHandle.validar()
 })
 
 
-
+/*## exercício 1
+Modifique a rota POST /pessoas para validar os dados. Se id ou
+nome estiverem ausentes ou vazios, retornar status 400 com
+mensagem de erro. Se válidos, inserir no banco e retornar 201.
+*/
 //Inserir pessoa no Aula1
 app.post('/pessoa', async (req, res) => {
-
     const connection = mysql.createPool({
         host: 'localhost',
         user: 'root',
@@ -292,45 +295,116 @@ app.post('/pessoa', async (req, res) => {
         const mySQLErrorHandle = new MysqlErrorHandle(err, res);
         mySQLErrorHandle.validar();
     }
-})//inserir pessoa
+})
 
+//inserir pessoa
 
+/*
+## exercício 2
+Crie a rota POST /cadastro_produto_v2. O cliente envia apenas id,
+nome, categoria e preco. O servidor deve gerar data_criacao
+automaticamente com new Date() e inserir data_modificacao como
+null. Retornar 201 com mensagem de sucesso.
+*/
 
 app.post('/cadastro_produto_v2', async (req, res) => {
+try {
+        const { id, nome, categoria, preco } = req.body
 
-    const connection = mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        database: 'dbteremercado',
-    });
-
-    try {
-
-        const { id, nome, categoria, preco } = req.body;
-
-        // validação
-        if (!id || !nome) {
-            res.status(400).json({
-                mensagem: 'id e nome sao obrigatorios'
-            });
-
+        if (!id || !nome || !categoria || !preco) {
+            res.status(400).json({ mensagem: 'dados invalidos' });
             return;
         }
 
-        await connection.execute(
-            `INSERT INTO aula1.pessoa VALUES (?, ?)`,
-            [id, nome]
-        );
+        const data_criacao = new Date();
+        const data_modificacao = null;
 
-        res.status(201).json({
-            mensagem: 'Pessoa inserida com sucesso'
-        });
+        const [resultado, campos] =
+            await connection.execute(
+                `insert into produto values (?, ?, ?, ?, ?, ?)`,
+                [id, nome, categoria, preco, data_criacao, data_modificacao]
+            );
 
+        console.log(resultado);
+        res.status(201).json({ mensagem: 'Produto inserido com sucesso' });
     } catch (err) {
         const mySQLErrorHandle = new MysqlErrorHandle(err, res);
         mySQLErrorHandle.validar();
     }
-})//inserir pessoa
+})
+//inserir pessoa
+
+/*
+## Exercício 3
+
+exercício 3
+Crie a rota POST /cadastro_multiplos_produtos que recebe um
+array de produtos no body. Para cada produto, inserir no banco
+com data_criacao automática e data_modificacao null. Retornar 201
+com a mensagem "X produtos cadastrados com sucesso!".
+*/
+
+app.post('/cadastro_multiplos_produtos', async (req, res) => {
+    try {
+        const produtos = req.body;
+
+        if (!Array.isArray(produtos)) {
+            res.status(400).json({ mensagem: 'Não é um array de produtos' });
+            return;
+        }
+
+        const data_criacao = new Date();
+        const data_modificacao = null;
+
+        for (const produto of produtos) {
+            const { id, nome, categoria, preco } = produto;
+
+            if (!id || !nome || !categoria || !preco) {
+                res.status(400).json({ mensagem: 'dados invalidos' });
+                return;
+            }
+
+            const [resultado, campos] =
+                await connection.execute(
+                    `insert into produto values (?, ?, ?, ?, ?, ?)`,
+                    [id, nome, categoria, preco, data_criacao, data_modificacao]
+                );
+        }
+
+        res.status(201).json({ mensagem: `${produtos.length} produtos cadastrados com sucesso!` });
+    } catch (err) {
+        const mySQLErrorHandle = new MysqlErrorHandle(err, res);
+        mySQLErrorHandle.validar();
+    }
+})
+
+// put 
+
+
+app.put('/produto/:id', async (req, res) => {
+ 
+  const{id} = req.params;
+
+  let{nome, preco, categoria} = req.body;
+
+  preco = preco ?? null;
+  categoria = categoria?? null;
+  
+  await connection.execute(
+    `
+    UPDATE produto 
+    SET nome = ?, preco = ? , categoria = ? 
+    WHERE id = ?
+    `,
+    [nome, preco, categoria, id]
+  )
+ 
+return res.json({
+  mensagem:"Produto substituido"
+})
+
+
+})
 
 
 //Criar servidor
