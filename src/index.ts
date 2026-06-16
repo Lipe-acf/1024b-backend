@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise'
 import express from 'express'
 import MysqlErrorHandle from './mysql_error_handle.js';
 import  connection from './mysql_connection.js';
+import type { ResultSetHeader } from "mysql2";
 import { type RowDataPacket } from "mysql2";
 import { time } from 'node:console';
 import cors from 'cors'
@@ -255,6 +256,7 @@ mysqlErrorHandle.validar()
 
 })
 
+//POST
 
 /*## exercício 1
 Modifique a rota POST /pessoas para validar os dados. Se id ou
@@ -379,7 +381,11 @@ app.post('/cadastro_multiplos_produtos', async (req, res) => {
 })
 
 // put 
+/*
+## Exercício 2
 
+**Na exercício anterior, criamos juntos a rota PUT /produto/:id que atualiza um produto no banco. Porém, o código que fizemos possui um problema: 
+se o cliente não enviar todos os campos no body, os campos não enviados são sobrescritos com null, apagando os dados que já estavam salvos no banco.***/
 
 app.put('/produto/:id', async (req, res) => {
  
@@ -406,6 +412,90 @@ return res.json({
 
 })
 
+//DELETE
+
+/*
+## Exercicio 1
+
+**Crie a rota DELETE /produto/:id. O id vem pela URL. Se não existir, retornar 404. Se deletado, retornar 200.***/
+app.delete("/produto/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await connection.execute<ResultSetHeader>(
+      "DELETE FROM produto WHERE id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ mensagem: "Produto não encontrado!" });
+    }
+
+    return res
+      .status(200)
+      .json({ mensagem: "Produto deletado com sucesso!" });
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res);
+    mysqlErrorHandle.validar();
+  }
+});
+
+/*
+## Exercicio 2
+
+**Crie a rota DELETE /pessoa/:id. O id vem pela URL. Fazer um SELECT antes de deletar para verificar existência. Se não existir, retornar 404. Se deletado, retornar 200.***/
+app.delete("/pessoa/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await connection.execute<ResultSetHeader>(
+      "SELECT * FROM pessoa WHERE id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ mensagem: "Produto não encontrado!" });
+    }
+    await connection.execute<ResultSetHeader>(
+      "DELETE FROM pessoa WHERE id = ?",
+      [id]
+    );
+
+    return res
+      .status(200)
+      .json({ mensagem: "Produto deletado com sucesso!" });
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res);
+    mysqlErrorHandle.validar();
+  }
+});
+
+/*## Exercício 3
+
+**Crie a rota DELETE /produto_categoria/:categoria. A categoria vem pela URL. Se não existir nenhum produto nessa categoria,
+ retornar 404. Se deletar, retornar 200 com "X produtos deletados com sucesso!".***/
+
+ app.delete("/produto_categoria/:categoria", async (req, res) => {
+  const { categoria } = req.params;
+
+  try {
+    const [result] = await connection.execute<ResultSetHeader>(
+      "DELETE FROM produto WHERE categoria = ?",
+      [categoria]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ mensagem: "Produto não encontrado!" });
+    }
+const quantidade = result.affectedRows
+    return res
+      .status(200)
+      .json({ mensagem: quantidade +" Produtos deletado com sucesso!" });
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err, res);
+    mysqlErrorHandle.validar();
+  }
+});
 
 //Criar servidor
 app.listen(8000, () => {
